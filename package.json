@@ -4,7 +4,8 @@
   "description": "backend api for EpiCare",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --files src/index.ts",
+    "dev": "ts-node-dev --poll --files src/index.ts index.d.ts",
+    "build": "rimraf dist && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -17,7 +18,9 @@
     "express": "^5.1.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.1"
+    "mongoose": "^8.13.1",
+    "resend": "^4.2.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",
