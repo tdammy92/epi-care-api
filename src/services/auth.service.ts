@@ -3,8 +3,9 @@ import { CONFLICT, INTERNAL_SERVER_ERROR, NOT_FOUND, TOO_MANY_REQUESTS, UNAUTHOR
 
 import VerificationCodeType from "../constants/verificationCodeType";
 import SessionModel, { SessionDocument } from "../models/session.model";
-import UserModel, { UserDocument } from "../models/user.model";
+import UserModel from "../models/user.model";
 import VerificationCodeModel from "../models/verificationCode.model";
+import { UserDocument } from "../schema/auth.schema";
 import appAssert from "../utils/appAssert";
 
 import {
@@ -18,6 +19,7 @@ import {
   getPasswordResetTemplate,
   getVerifyEmailTemplate,
 } from "../utils/emailTemplates";
+import { getMenuLinksForRole } from "../utils/getRoles";
 import { hashValue } from "../utils/hashing";
 import {
   RefreshTokenPayload,
@@ -31,6 +33,8 @@ type CreateAccountParams = {
   email: string;
   password: string;
   userAgent?: string;
+  role: UserDocument["role"];
+  profile: UserDocument["profile"];
 };
 
 
@@ -39,13 +43,27 @@ export const createAccount = async (data: CreateAccountParams) => {
   const existingUser = await UserModel.exists({
     email: data.email,
   });
+
   appAssert(!existingUser, CONFLICT, "Email already in use");
 
-  const user = await UserModel.create({
+  // console.log("===== i got here after email verification ===== ",JSON.stringify(data,null,4));
+  
+
+  const createData = {
     email: data.email,
     password: data.password,
-  });
+    role: data.role,
+    profile: data.profile,
+  }
+
+  // console.log("===== i got here  ===== ",JSON.stringify(createData,null,4))
+  const user = await UserModel.create(createData);
+  
+  // console.log("===== i got here after account creation===== ",JSON.stringify(user,null,4));
+  
+  
   const userId = user._id;
+
   const verificationCode = await VerificationCodeModel.create({
     userId,
     type: VerificationCodeType.EmailVerification,
@@ -79,7 +97,8 @@ export const createAccount = async (data: CreateAccountParams) => {
     sessionId: session._id,
   });
   return {
-    user: user.omitPassword(),
+    // user: user.omitPassword(),
+    user: {...user.omitSensitive(),access:getMenuLinksForRole(user.role)},
     accessToken,
     refreshToken,
   };
@@ -97,6 +116,8 @@ export const loginUser = async ({
   password,
   userAgent,
 }: LoginParams) => {
+
+
   const user = await UserModel.findOne({ email });
   appAssert(user, UNAUTHORIZED, "Invalid email or password");
 
@@ -119,7 +140,7 @@ export const loginUser = async ({
     userId,
   });
   return {
-    user: user.omitPassword(),
+    user: {...user.omitSensitive(),access:getMenuLinksForRole(user.role)},
     accessToken,
     refreshToken,
   };
@@ -145,7 +166,8 @@ export const verifyEmail = async (code: string) => {
   await validCode.deleteOne();
 
   return {
-    user: updatedUser.omitPassword(),
+    // user: updatedUser.omitPassword(),
+    user: updatedUser.omitSensitive(),
   };
 };
 
@@ -268,5 +290,6 @@ export const resetPassword = async ({
   // delete all sessions
   await SessionModel.deleteMany({ userId: validCode.userId });
 
-  return { user: updatedUser.omitPassword() };
+  // return { user: updatedUser.omitPassword() };
+  return { user: updatedUser.omitSensitive() };
 };
