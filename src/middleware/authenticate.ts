@@ -15,6 +15,7 @@ const authenticate: RequestHandler = (req, res, next) => {
   );
 
   const { error, payload } = verifyToken(accessToken);
+  
   appAssert(
     payload,
     UNAUTHORIZED,
