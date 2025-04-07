@@ -48,7 +48,7 @@ export const nurseProfileSchema = baseProfileSchema.extend({
 });
 
 export const patientProfileSchema = baseProfileSchema.extend({
-  patientId: z.string().min(4, "Patient ID must be at least 4 characters"),
+  patientId: z.string().min(4, "Patient ID must be at least 4 characters").optional(),
   bloodType: z
     .enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
     .optional(),

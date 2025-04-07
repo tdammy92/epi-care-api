@@ -189,10 +189,30 @@ const userSchema = new mongoose.Schema<UserDocument>(
           message: "Patient ID must be at least 4 characters",
         },
       },
+      guardianFullName: {
+        type: String,
+        required: function (this: any) {
+          return this.role === "patient";
+        },
+      },
+      relationShip: {
+        type: String,
+        required: function (this: any) {
+          return this.role === "patient";
+        },
+      },
+      guardianPhone: {
+        type: String,
+        required: function (this: any) {
+          return this.role === "patient";
+        },
+      },
       bloodType: {
         type: String,
         enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       },
+
+
       allergies: { type: [String] },
       caseLoad: { type: Number },
       certification: { type: String },

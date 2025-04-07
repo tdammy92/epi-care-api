@@ -19,6 +19,7 @@ import {
   getPasswordResetTemplate,
   getVerifyEmailTemplate,
 } from "../utils/emailTemplates";
+import { generatePatienId } from "../utils/generateIds";
 import { getMenuLinksForRole } from "../utils/getRoles";
 import { hashValue } from "../utils/hashing";
 import {
@@ -53,7 +54,7 @@ export const createAccount = async (data: CreateAccountParams) => {
     email: data.email,
     password: data.password,
     role: data.role,
-    profile: data.profile,
+    profile:{...data.profile,...(data?.role==='patient' && {patientId:generatePatienId()})},
   }
 
   // console.log("===== i got here  ===== ",JSON.stringify(createData,null,4))
@@ -293,3 +294,4 @@ export const resetPassword = async ({
   // return { user: updatedUser.omitPassword() };
   return { user: updatedUser.omitSensitive() };
 };
+
