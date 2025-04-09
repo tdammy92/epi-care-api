@@ -212,7 +212,6 @@ const userSchema = new mongoose.Schema<UserDocument>(
         enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       },
 
-
       allergies: { type: [String] },
       caseLoad: { type: Number },
       certification: { type: String },
