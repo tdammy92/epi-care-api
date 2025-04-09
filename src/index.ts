@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express, {  Response } from "express"
+import morgan from "morgan"
 import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -9,6 +10,7 @@ import userRoutes from "./routes/user.route";
 import sessionRoutes from "./routes/session.route";
 import errorHandler from "./middleware/errorHandler";
 import connectToDatabase from "./config/db";
+import labRoutes from "./routes/lab.route";
 
 const server = express();
 
@@ -17,6 +19,7 @@ const server = express();
 // add middleware
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
+server.use(morgan("tiny"));
 server.use(
   cors({
     origin: APP_ORIGIN,
@@ -27,7 +30,7 @@ server.use(cookieParser());
 
 // health check
 //@ts-ignore
-server.get("/", (_, res: Response) => {
+server.get("/api", (_, res: Response) => {
     return res.status(200).json({
       status: "healthy",
     });
@@ -35,11 +38,12 @@ server.get("/", (_, res: Response) => {
 
 
 // auth routes
-server.use("/auth", authRoutes);
+server.use("/api/auth", authRoutes);
 
 // protected routes
-server.use("/user", authenticate, userRoutes);
-server.use("/sessions", authenticate, sessionRoutes);
+server.use("/api/user", authenticate, userRoutes);
+server.use("/api/sessions", authenticate, sessionRoutes);
+server.use("/api/lab", authenticate, labRoutes);
 
 // error handler
 server.use(errorHandler);
