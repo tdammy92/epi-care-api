@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReportHandler, getAllLabReportHandler, getAllReportByIdHandleer } from "../controllers/lab.controller";
+import { createReportHandler, getAllLabReportHandler, getReportByIdHandler,  } from "../controllers/lab.controller";
 
 
 const labRoutes = Router();
@@ -10,7 +10,7 @@ const labRoutes = Router();
 labRoutes.get("/", getAllLabReportHandler);
 
 //get lab report by ID
-labRoutes.get("/:id", getAllReportByIdHandleer);
+labRoutes.get("/:id", getReportByIdHandler);
 
 
 labRoutes.post("/create-report", createReportHandler);
