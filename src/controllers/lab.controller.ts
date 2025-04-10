@@ -1,5 +1,5 @@
 import { CREATED, OK } from "../constants/statusCode";
-import { createReport, getAllReport, getAllReportById } from "../services/lab.service";
+import { createReport, getAllReport, getReportById } from "../services/lab.service";
 import catchErrors from "../utils/catchErrors";
 
 export const createReportHandler = catchErrors(async (req, res) => {
@@ -19,12 +19,12 @@ export const getAllLabReportHandler = catchErrors(async (req, res) => {
   return res.status(OK).json(allReport);
 });
 
-export const getAllReportByIdHandleer = catchErrors(async (req, res) => {
+export const getReportByIdHandler = catchErrors(async (req, res) => {
   // get payload from body
   const {id:reportId} = req.params;
 
   //create  report
-  const { report } = await getAllReportById(reportId);
+  const { report } = await getReportById(reportId);
 
   return res.status(OK).json(report[0]);
 });
