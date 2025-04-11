@@ -22,10 +22,16 @@ server.use(express.urlencoded({ extended: true }));
 server.use(morgan("tiny"));
 server.use(
   cors({
-    origin: APP_ORIGIN,
-    credentials: true,
+    origin: '*',
+    credentials: false, // must be false when using '*' as origin
   })
 );
+// server.use(
+//   cors({
+//     origin: APP_ORIGIN,
+//     credentials: true,
+//   })
+// );
 server.use(cookieParser());
 
 // health check
