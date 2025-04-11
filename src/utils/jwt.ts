@@ -22,7 +22,7 @@ const defaults: SignOptions = {
 };
 
 const accessTokenSignOptions: SignOptionsAndSecret = {
-  expiresIn: "10d",
+  expiresIn: "25d",
   secret: JWT_SECRET,
 };
 
