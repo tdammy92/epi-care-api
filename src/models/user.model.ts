@@ -57,7 +57,7 @@ import {
 // export default UserModel;
 
 // Mongoose schema definition
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<UserDocument>(
   {
     email: {
       type: String,
@@ -250,9 +250,9 @@ userSchema.methods.comparePassword = async function (val: string) {
 };
 //!! uncomment later
 // Add method to validate user data against Zod schema
-// userSchema.methods.validateUser = function () {
-//   return registerSchema.safeParse(this.toObject());
-// };
+userSchema.methods.validateUser = function () {
+  return registerSchema.safeParse(this.toObject());
+};
 
 // Method to omit sensitive fields
 userSchema.methods.omitSensitive = function () {
@@ -286,11 +286,10 @@ userSchema.methods.validateUser = function () {
 };
 
 
-//!! uncomment later
 // Static method for Zod validation before saving
-// userSchema.statics.zodValidate = function (data: any) {
-//   return registerSchema.safeParse(data);
-// };
+userSchema.statics.zodValidate = function (data: any) {
+  return registerSchema.safeParse(data);
+};
 
 // userSchema.methods.omitPassword = function () {
 //     const user = this.toObject();
