@@ -71,13 +71,15 @@ export const labScientistProfileSchema = baseProfileSchema.extend({
   labDepartment: z.string().optional(),
 });
 
-// const passwordSchema = z.string().min(6).max(255);
-export const passwordSchema = z
-  .string()
-  .min(8, "Password must be at least 8 characters")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number");
+export const passwordSchema = z.string().min(4).max(20);
+
+//!! uncomment later
+// export const passwordSchema = z
+//   .string()
+//   .min(8, "Password must be at least 8 characters")
+//   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+//   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+//   .regex(/[0-9]/, "Password must contain at least one number");
 
 
 
